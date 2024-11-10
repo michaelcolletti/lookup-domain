@@ -12,20 +12,31 @@ This project is a Python-based tool for performing domain lookups. It allows use
 ## Requirements
 
 - Python 3.x
-- `requests` library
-- `dnspython` library
 
 ## Installation
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/yourusername/lookup-domain.git
+    git clone https://github.com/<your-username>/lookup-domain.git
     ```
 2. Navigate to the project directory:
     ```sh
     cd lookup-domain
     ```
-3. Install the required dependencies:
+3. Create a virtual environment:
+    ```sh
+    python -m venv venv
+    ```
+4. Activate the virtual environment:
+    - On Windows:
+        ```sh
+        venv\Scripts\activate
+        ```
+    - On macOS and Linux:
+        ```sh
+        source venv/bin/activate
+        ```
+5. Install the required dependencies:
     ```sh
     pip install -r requirements.txt
     ```

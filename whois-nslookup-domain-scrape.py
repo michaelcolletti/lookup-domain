@@ -1,11 +1,18 @@
-import os
+"""
+This script performs WHOIS lookup, NSLookup, and homepage scraping for a given domain.
+It saves the WHOIS and NSLookup results to text files and prints the homepage title and description.
+"""
+
 import subprocess
 import requests
 from bs4 import BeautifulSoup
 from colorama import Fore, Style, init
-
-init(autoreset=True)
-
+    try:
+        result = subprocess.run(['whois', domain], capture_output=True, text=True)
+        with open(f"{domain}-whois.txt", "w") as file:
+            file.write(result.stdout)
+    except FileNotFoundError:
+        print(Fore.RED + "Error: 'whois' command not found. Please install it and try again.")
 def whois_lookup(domain):
     result = subprocess.run(['whois', domain], capture_output=True, text=True)
     with open(f"{domain}-whois.txt", "w") as file:
