@@ -46,7 +46,7 @@ This project is a Python-based tool for performing domain lookups. It allows use
 To use the domain lookup tool, run the following command:
 
 ```sh
-python lookup.py <domain>
+python whois-nslookup-domain-scrape.py <domain>
 ```
 
 Replace `<domain>` with the domain you want to look up.
@@ -54,7 +54,7 @@ Replace `<domain>` with the domain you want to look up.
 ### Example
 
 ```sh
-python lookup.py example.com
+python whois-nslookup-domain-scrape.py example.com
 ```
 
 ## Contributing
