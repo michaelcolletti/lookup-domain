@@ -56,10 +56,27 @@ def scrape_homepage(domain):
     except requests.exceptions.RequestException as e:
         print(Fore.RED + f"Error fetching the homepage: {e}")
 
+def save_summary(domain):
+    try:
+        with open(os.path.join(EXPORT_DIR, f"{domain}-whois.txt"), "r") as whois_file:
+            whois_data = whois_file.read()
+        
+        with open(os.path.join(EXPORT_DIR, f"{domain}-nslookup.txt"), "r") as nslookup_file:
+            nslookup_data = nslookup_file.read()
+        
+        summary = f"# {domain} Summary\n\n## WHOIS Data\n```\n{whois_data}\n```\n\n## NSLookup Data\n```\n{nslookup_data}\n```"
+        
+        with open(os.path.join(EXPORT_DIR, f"{domain}-summary.md"), "w") as summary_file:
+            summary_file.write(summary)
+        
+        print(Fore.GREEN + f"Summary saved for {domain}")
+    except FileNotFoundError as e:
+        print(Fore.RED + f"Error creating summary: {e}")
+
 def main_menu():
     while True:
         print(Fore.CYAN + "1. Whois and NSLookup")
-        print(Fore.CYAN + "2. Scrape Homepage")
+        print(Fore.CYAN + "2. Scrape Homepage and Save Summary")
         print(Fore.CYAN + "3. Exit")
         choice = input(Fore.YELLOW + "Enter your choice: ")
 
@@ -71,6 +88,7 @@ def main_menu():
         elif choice == '2':
             domain = input(Fore.YELLOW + "Enter domain: ")
             scrape_homepage(domain)
+            save_summary(domain)
         elif choice == '3':
             print(Fore.RED + "Exiting...")
             break
@@ -79,25 +97,3 @@ def main_menu():
 
 if __name__ == "__main__":
     main_menu()
-    def save_summary(domain):
-        try:
-            with open(os.path.join(EXPORT_DIR, f"{domain}-whois.txt"), "r") as whois_file:
-                whois_data = whois_file.read()
-            
-            with open(os.path.join(EXPORT_DIR, f"{domain}-nslookup.txt"), "r") as nslookup_file:
-                nslookup_data = nslookup_file.read()
-            
-            summary = f"# {domain} Summary\n\n## WHOIS Data\n```\n{whois_data}\n```\n\n## NSLookup Data\n```\n{nslookup_data}\n```"
-            
-            with open(os.path.join(EXPORT_DIR, f"{domain}-summary.md"), "w") as summary_file:
-                summary_file.write(summary)
-            
-            print(Fore.GREEN + f"Summary saved for {domain}")
-        except FileNotFoundError as e:
-            print(Fore.RED + f"Error creating summary: {e}")
-
-    # Example usage after performing whois and nslookup
-    if __name__ == "__main__":
-        main_menu()
-        domain = input(Fore.YELLOW + "Enter domain to create summary: ")
-        save_summary(domain)
