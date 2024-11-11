@@ -1,6 +1,6 @@
 # Lookup Domain
 
-This project is a Python-based tool for performing domain lookups. It allows users to retrieve information about a domain, such as its IP address, registrar details, and more.
+This was a learning project for me. It is a Python-based tool for performing domain lookups. It allows users to retrieve information about a domain, such as its IP address, registrar details, and more.
 
 ## Features
 
@@ -8,6 +8,9 @@ This project is a Python-based tool for performing domain lookups. It allows use
 - Fetch registrar details
 - Check domain availability
 - Display DNS records
+- **New Feature:** Retrieve SSL certificate information
+- **New Feature:** Perform reverse IP lookup
+- **New Feature:** Display WHOIS history
 
 ## Requirements
 
@@ -68,3 +71,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Contact
 
 For any questions or suggestions, please open an issue or contact the repository owner.
+

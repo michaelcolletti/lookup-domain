@@ -1,3 +1,4 @@
+
 """
 This script performs WHOIS lookup, NSLookup, and homepage scraping for a given domain.
 It saves the WHOIS and NSLookup results to text files and prints the homepage title and description.
@@ -73,32 +74,11 @@ def save_summary(domain):
     except FileNotFoundError as e:
         print(Fore.RED + f"Error creating summary: {e}")
 
-def check_online_status(domain):
-    try:
-        response = requests.get(f"https://downforeveryoneorjustme.com/{domain}")
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'html.parser')
-        status = soup.find('div', {'class': 'container'}).find('p').text
-        print(Fore.GREEN + f"Online status for {domain}: {status}")
-    except requests.exceptions.RequestException as e:
-        print(Fore.RED + f"Error checking online status: {e}")
-
-def print_menu():
-    print(Fore.CYAN + """
-    ============================
-    |       Domain Tools       |
-    ============================
-    | 1. Whois and NSLookup    |
-    | 2. Scrape Homepage       |
-    |    and Save Summary      |
-    | 3. Check Online Status   |
-    | 4. Exit                  |
-    ============================
-    """)
-
 def main_menu():
     while True:
-        print_menu()
+        print(Fore.CYAN + "1. Whois and NSLookup")
+        print(Fore.CYAN + "2. Scrape Homepage and Save Summary")
+        print(Fore.CYAN + "3. Exit")
         choice = input(Fore.YELLOW + "Enter your choice: ")
 
         if choice == '1':
@@ -111,9 +91,6 @@ def main_menu():
             scrape_homepage(domain)
             save_summary(domain)
         elif choice == '3':
-            domain = input(Fore.YELLOW + "Enter domain: ")
-            check_online_status(domain)
-        elif choice == '4':
             print(Fore.RED + "Exiting...")
             break
         else:
@@ -121,3 +98,4 @@ def main_menu():
 
 if __name__ == "__main__":
     main_menu()
+
