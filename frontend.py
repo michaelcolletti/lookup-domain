@@ -35,7 +35,7 @@ def lookup_domain():
         return jsonify({"error": "No domain provided"}), 400
     
     # Use the lookup function from lookup.py
-    status = lookup.check_domain_status(domain)
+    status = lookup.check_online_status(domain)
     
     return jsonify({"domain": domain, "status": status})
 
