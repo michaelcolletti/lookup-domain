@@ -1,0 +1,9 @@
+Flask
+requests
+jsonify
+bs4
+colorama
+fastapi
+
+
+
