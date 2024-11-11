@@ -75,14 +75,25 @@ def save_summary(domain):
 
 def check_online_status(domain):
     try:
-        response = requests.get(f"https://downforeveryoneorjustme.com/{domain}")
-        response.raise_for_status()
-        soup = BeautifulSoup(response.text, 'html.parser')
-        status = soup.find('div', {'class': 'container'}).find('p').text
-        print(Fore.GREEN + f"Online status for {domain}: {status}")
+        response = requests.get(f"http://{domain}")
+        if response.status_code == 200:
+            print(Fore.GREEN + f"{domain} is online.")
+        else:
+            print(Fore.RED + f"{domain} is offline or returned status code {response.status_code}.")
     except requests.exceptions.RequestException as e:
         print(Fore.RED + f"Error checking online status: {e}")
-
+        def dig_query(domain):
+            try:
+                result = subprocess.run(['dig', domain, '+noall', '+answer', '+json'], capture_output=True, text=True, check=True)
+                with open(os.path.join(EXPORT_DIR, f"{domain}.json"), "w") as file:
+                    file.write(result.stdout)
+                print(Fore.GREEN + f"Dig query results saved for {domain}")
+            except subprocess.CalledProcessError:
+                print(Fore.RED + f"Failed to perform dig query for {domain}")
+            except FileNotFoundError:
+                print(Fore.RED + f"Dig command not found for {domain}")
+            except Exception as e:
+                print(Fore.RED + f"Error performing dig query: {e}")
 def print_menu():
     print(Fore.CYAN + """
     ============================
@@ -114,6 +125,64 @@ def main_menu():
             domain = input(Fore.YELLOW + "Enter domain: ")
             check_online_status(domain)
         elif choice == '4':
+            print(Fore.RED + "Exiting...")
+            break
+        else:
+            print(Fore.RED + "Invalid choice. Please try again.")
+
+def retrieve_ssl_certificate(domain):
+    try:
+        result = subprocess.run(['openssl', 's_client', '-connect', f"{domain}:443", '-servername', domain], capture_output=True, text=True, input='Q', check=True)
+        cert_start = result.stdout.find("-----BEGIN CERTIFICATE-----")
+        cert_end = result.stdout.find("-----END CERTIFICATE-----") + len("-----END CERTIFICATE-----")
+        certificate = result.stdout[cert_start:cert_end]
+        
+        with open(os.path.join(EXPORT_DIR, f"{domain}-ssl-cert.txt"), "w") as file:
+            file.write(certificate)
+        
+        print(Fore.GREEN + f"SSL certificate retrieved and saved for {domain}")
+    except subprocess.CalledProcessError:
+        print(Fore.RED + f"Failed to retrieve SSL certificate for {domain}")
+    except FileNotFoundError:
+        print(Fore.RED + f"OpenSSL command not found for {domain}")
+    except Exception as e:
+        print(Fore.RED + f"Error retrieving SSL certificate: {e}")
+
+def print_menu():
+    print(Fore.CYAN + """
+    ============================
+    |       Domain Tools       |
+    ============================
+    | 1. Whois and NSLookup    |
+    | 2. Scrape Homepage       |
+    |    and Save Summary      |
+    | 3. Check Online Status   |
+    | 4. Retrieve SSL Cert     |
+    | 5. Exit                  |
+    ============================
+    """)
+
+def main_menu():
+    while True:
+        print_menu()
+        choice = input(Fore.YELLOW + "Enter your choice: ")
+
+        if choice == '1':
+            domain = input(Fore.YELLOW + "Enter domain: ")
+            whois_lookup(domain)
+            nslookup(domain)
+            print(Fore.GREEN + f"Whois and NSLookup results saved for {domain}")
+        elif choice == '2':
+            domain = input(Fore.YELLOW + "Enter domain: ")
+            scrape_homepage(domain)
+            save_summary(domain)
+        elif choice == '3':
+            domain = input(Fore.YELLOW + "Enter domain: ")
+            check_online_status(domain)
+        elif choice == '4':
+            domain = input(Fore.YELLOW + "Enter domain: ")
+            retrieve_ssl_certificate(domain)
+        elif choice == '5':
             print(Fore.RED + "Exiting...")
             break
         else:

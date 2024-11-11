@@ -20,7 +20,7 @@ This was a learning project for me. It is a Python-based tool for performing dom
 
 1. Clone the repository:
     ```sh
-    git clone https://github.com/<your-username>/lookup-domain.git
+    git clone https://github.com/michaelcolletti/lookup-domain.git
     ```
 2. Navigate to the project directory:
     ```sh
@@ -49,7 +49,7 @@ This was a learning project for me. It is a Python-based tool for performing dom
 To use the domain lookup tool, run the following command:
 
 ```sh
-python whois-nslookup-domain-scrape.py <domain>
+python lookup.py <domain>
 ```
 
 Replace `<domain>` with the domain you want to look up.
@@ -57,12 +57,12 @@ Replace `<domain>` with the domain you want to look up.
 ### Example
 
 ```sh
-python whois-nslookup-domain-scrape.py example.com
+python lookup.py example.com
 ```
 
 ## Contributing
 
-Contributions are welcome! Please fork the repository and submit a pull request.
+Yes, indeed. Contributions are welcome! Please fork the repository and submit a pull request.
 
 ## License
 
