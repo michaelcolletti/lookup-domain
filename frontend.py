@@ -1,11 +1,31 @@
 from flask import Flask, jsonify, request, render_template_string
+import whois
 import lookup  # Assuming lookup.py is in the same directory or in the Python path
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return "Welcome to the Domain Lookup Service!"
+    return render_template_string('''
+        <h1>Welcome to the Domain Lookup Service!</h1>
+        <form action="/lookup" method="get">
+            <label for="domain">Enter domain:</label>
+            <input type="text" id="domain" name="domain">
+            <input type="submit" value="Check">
+        </form>
+    ''')
+
+@app.route('/whois', methods=['GET'])
+def whois_lookup():
+    domain = request.args.get('domain')
+    if not domain:
+        return jsonify({"error": "No domain provided"}), 400
+    
+    try:
+        domain_info = whois.whois(domain)
+        return jsonify(domain_info.to_dict())
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route('/lookup', methods=['GET'])
@@ -87,16 +107,15 @@ def scrape_homepage():
     return jsonify({"input": input_value, "result": result})
 
 if __name__ == '__main__':
-@app.route('/webcheck', methods=['GET'])
-def webcheck():
-    domain = request.args.get('domain')
-    if not domain:
-        return jsonify({"error": "No domain provided"}), 400
-    
-    # Use the lookup function from lookup.py to check online status
-    online_status = lookup.check_online_status(domain)
-    
-    return jsonify({"domain": domain, "online_status": online_status})
-
-if __name__ == '__main__':
     app.run(debug=True)
+    @app.route('/webcheck', methods=['GET'])
+    def webcheck():
+        domain = request.args.get('domain')
+        if not domain:
+            return jsonify({"error": "No domain provided"}), 400
+        
+        # Use the lookup function from lookup.py to check online status
+        online_status = lookup.check_online_status(domain)
+        
+        return jsonify({"domain": domain, "online_status": online_status})
+    
