@@ -5,6 +5,3 @@ bs4
 colorama
 fastapi
 whois
-
-
-
